@@ -50,8 +50,6 @@ public class DistributedSpaceBaseDemo {
     }
 
     public void run() throws InterruptedException {
-        if (node == 1)
-            Debug.dumpAfter(40000);
         final AABB myBounds = AABB.create(node - 1, node, 0, 1); // [0, 1] / [1, 2]     
         final AABB worldBounds = AABB.create(0, MAX_NODE_ID, 0, 1);
         final RandSpatial random = new RandSpatial();
