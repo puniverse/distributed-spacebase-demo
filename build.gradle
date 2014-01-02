@@ -16,13 +16,13 @@ repositories {
         dirs 'cacheLibs/natives','cacheLibs' 
     }
     // Comment out these for offline mode. see more instructions near CopyLibs task
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        maven { url "https://oss.sonatype.org/content/repositories/releases" }
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-        maven { url "http://download.oracle.com/maven/" }
-    }
+//    repositories {
+//        mavenLocal()
+//        mavenCentral()
+//        maven { url "https://oss.sonatype.org/content/repositories/releases" }
+//        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+//        maven { url "http://download.oracle.com/maven/" }
+//    }
 }
 
 configurations {
@@ -85,7 +85,7 @@ task copyLibs(type: Sync) {
     into { "${rootProject.projectDir}/cacheLibs" }
 }
 //// comment out after running copyLibs
-compileJava.dependsOn copyProprietary
+//compileJava.dependsOn copyProprietary
 ////// End of offline mode part
 
 //task(runWithArgs, dependsOn: 'classes', type: JavaExec) {
