@@ -11,6 +11,7 @@ mainClassName = 'co.paralleluniverse.spacebase.galaxy.DistributedSpaceBaseDemo'
 
 repositories {
     flatDir { 
+        dirs 'baselib'
         dirs 'libs'
         dirs 'cacheLibs/natives','cacheLibs' 
     }
@@ -41,9 +42,6 @@ dependencies {
     compile "co.paralleluniverse:quasar-actors:0.4.0-SNAPSHOT"
     compile "com.google.guava:guava:15.0"
     compile "com.codahale.metrics:metrics-core:3.0.1" 
-    compile "net.openhft:chronicle:2.0.2"
-    compile 'org.apache.commons:commons-lang3:3.1'
-    compile 'net.jpountz.lz4:lz4:1.2.0'
 
     quasar  "co.paralleluniverse:quasar-core:0.4.0-SNAPSHOT"
     
@@ -53,13 +51,24 @@ dependencies {
     runtime "org.slf4j:slf4j-api:1.7.5"
     runtime "org.apache.logging.log4j:log4j-slf4j-impl:2.0-beta9", "org.apache.logging.log4j:log4j-api:2.0-beta9", "org.apache.logging.log4j:log4j-core:2.0-beta9"
     runtime "com.lmax:disruptor:3.2.0" // required for log4j
-    compile "net.openhft:lang:6.1.1" // for chronicle
     compile("com.esotericsoftware.kryo:kryo:2.22") {
         exclude group: "org.ow2.asm", module: '*'
     }
     compile("de.javakaffee:kryo-serializers:0.26") {
         exclude group: "com.esotericsoftware.kryo", module: '*'
     }
+    runtime "org.springframework:spring-core:3.2.5.RELEASE"
+    runtime "org.springframework:spring-beans:3.2.5.RELEASE"
+    runtime "org.springframework:spring-context:3.2.5.RELEASE"
+    runtime "org.springframework:spring-expression:3.2.5.RELEASE"
+    runtime "org.springframework:spring-aop:3.2.5.RELEASE"
+    runtime "com.codahale.metrics:metrics-core:3.0.1" 
+    runtime "io.netty:netty:3.8.0.Final"
+    runtime "org.jgroups:jgroups:3.4.1.Final"
+    runtime "com.googlecode.concurrentlinkedhashmap:concurrentlinkedhashmap-lru:1.4"
+    runtime "com.sleepycat:je:5.0.73"
+    runtime "co.parallelunivese:high-scale-lib:" // non-Maven
+    runtime "org.apache:commons-logging:1.1.1"
 }
 
 task copyProprietary(type: Sync) {
@@ -93,9 +102,11 @@ run {
 
 tasks.withType(JavaExec) {
     jvmArgs '-server'
-    jvmArgs "-javaagent:${configurations.quasar.iterator().next()}" // =vdmc (verbose, debug, allow monitors, check class)
     // systemProperty "co.paralleluniverse.fibers.DefaultFiberPool.parallelism", "4"
     systemProperty "co.paralleluniverse.fibers.DefaultFiberPool.monitor", "JMX" // "METRICS" // "NONE" //
+
+    // Quasar
+    // jvmArgs "-javaagent:${configurations.quasar.iterator().next()}" // =vdmc (verbose, debug, allow monitors, check class)
 
     // Galaxy
     systemProperty "jgroups.bind_addr", "127.0.0.1"
