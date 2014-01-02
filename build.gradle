@@ -15,13 +15,13 @@ repositories {
         dirs 'cacheLibs/natives','cacheLibs' 
     }
     // Comment out these for offline mode. see more instructions near CopyLibs task
-        repositories {
-            mavenLocal()
-            mavenCentral()
-            maven { url "https://oss.sonatype.org/content/repositories/releases" }
-            maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-            maven { url "http://download.oracle.com/maven/" }
-        }
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/releases" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+        maven { url "http://download.oracle.com/maven/" }
+    }
 }
 
 configurations {
@@ -47,7 +47,7 @@ dependencies {
 
     quasar  "co.paralleluniverse:quasar-core:0.4.0-SNAPSHOT"
     
-    // we need the following only because the jars are in baselib, and gradle doesn't know about their transitive dependencies
+    // we need the following only because the jars are in a lib directory, and gradle doesn't know about their transitive dependencies
     runtime "net.sf.trove4j:trove4j:3.0.3"
     runtime "org.ow2.asm:asm:4.2", "org.ow2.asm:asm-commons:4.2", "org.ow2.asm:asm-util:4.2", "org.ow2.asm:asm-tree:4.2", "org.ow2.asm:asm-analysis:4.2"
     runtime "org.slf4j:slf4j-api:1.7.5"
@@ -97,6 +97,13 @@ tasks.withType(JavaExec) {
     // systemProperty "co.paralleluniverse.fibers.DefaultFiberPool.parallelism", "4"
     systemProperty "co.paralleluniverse.fibers.DefaultFiberPool.monitor", "JMX" // "METRICS" // "NONE" //
 
+    // Galaxy
+    systemProperty "jgroups.bind_addr", "127.0.0.1"
+    systemProperty "galaxy.multicast.address", "225.0.0.1"
+    systemProperty "galaxy.multicast.port", "7050"
+    systemProperty "co.paralleluniverse.galaxy.configFile", "config/peer.xml"
+    systemProperty "co.paralleluniverse.galaxy.autoGoOnline", "true"
+        
     // memory
     jvmArgs '-Xmx1024m'
     jvmArgs '-XX:+UseParallelGC'
@@ -132,8 +139,7 @@ applicationDistribution.from(projectDir) {
 startScripts {
     applicationName = 'distributed-spacebase-demo'
     mainClassName = 'co.paralleluniverse.spacebase.galaxy.DistributedSpaceBaseDemo'
-    defaultJvmOpts = 
-    run.jvmArgs.findAll{!it.startsWith('-javaagent:')} + 
+    defaultJvmOpts = run.jvmArgs.findAll{!it.startsWith('-javaagent:')} + 
     run.systemProperties.collect { k,v -> "-D$k=$v" } +
     ["-javaagent:lib/${configurations.quasar.iterator().next().name}"]
 }

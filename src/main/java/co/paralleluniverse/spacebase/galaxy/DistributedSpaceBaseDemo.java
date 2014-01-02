@@ -24,7 +24,15 @@ public class DistributedSpaceBaseDemo {
     private final SpaceBase<Thing> sb;
     private final int node;
 
-    public DistributedSpaceBaseDemo(final int node) throws InterruptedException {
+    public static void main(String[] args) throws Exception {
+        if(args.length != 1) {
+            System.err.println("USAGE: DistributedSpaceBaseDemo <node-id>");
+            return;
+        }
+        new DistributedSpaceBaseDemo(Integer.parseInt(args[0])).run();
+    }
+    
+    public DistributedSpaceBaseDemo(final int node) throws Exception {
         // System.setProperty("co.paralleluniverse.io.useJDKSerialization", "true");
         this.node = node;
         System.setProperty("galaxy.nodeId", Integer.toString(node));
