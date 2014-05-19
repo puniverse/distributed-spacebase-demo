@@ -6,3 +6,4 @@ build/
 .gradle/
 /persist/
 /.nb-gradle/profiles/private/
+/.nb-gradle/private/
